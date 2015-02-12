@@ -1,2 +1,2 @@
-PR .= ".2"
+PR .= ".10"
 FILESEXTRAPATHS := "${THISDIR}/${PN}:"
