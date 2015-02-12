@@ -1,0 +1,16 @@
+diff --git a/xenvm/vmconfig.ml b/xenvm/vmconfig.ml
+index 6ad8c01..58ddda2 100644
+--- a/xenvm/vmconfig.ml
++++ b/xenvm/vmconfig.ml
+@@ -812,7 +812,7 @@ let empty =
+ 		flask_label = None;
+ 		cores_per_socket = None;
+ 		stubdom = None;
+-		stubdom_memory = 64L;
++		stubdom_memory = 256L;
+ 		stubdom_initrd = Some "/usr/lib/xen/boot/stubdomain-initramfs";
+ 		stubdom_kernel = "/usr/lib/xen/boot/stubdomain-bzImage";
+		stubdom_cmdline = "init=/init xen_blkfront.max=8";
+-- 
+2.1.0
+
