@@ -21,21 +21,18 @@
 # THE SOFTWARE.
 #
 
-export PATH="/sbin:$PATH"
+export PATH="/sbin:/usr/sbin:$PATH"
 
 mount -t devtmpfs none /dev
 
-exec 0<&-                      
-exec 1<&-              
-exec 2<&-
+#exec 0<&-                      
+#exec 1<&-              
+#exec 2<&-
 
 exec 0< /dev/hvc0
 exec 1> /dev/hvc0
 exec 2> /dev/hvc0
 
-#Simple shell test.
-echo "stubdom: I'm here."
-/bin/sh </dev/hvc0 >/dev/hvc0 2>/dev/hvc0
 
 ## the modprobe of busybox-static is broken
 ## so we have to use insmod directly
@@ -63,9 +60,9 @@ echo "Command line: `cat /proc/cmdline`"
 
 ln -s /proc/self/fd/2 /dev/stderr
 
-QEMU_CMDLINE=`cat /proc/cmdline | cut -d' ' -f5- `
+QEMU_CMDLINE=`cat /proc/cmdline | cut -d' ' -f4- `
 
-DOMID=`echo $QEMU_CMDLINE | cut -d' ' -f3 `
+DOMID=`echo $QEMU_CMDLINE | cut -d' ' -f2 `
 
 echo $*
 echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -85,9 +82,11 @@ is_dmagent=`echo $QEMU_CMDLINE | cut -d' ' -f1`
 
 if [ "$is_dmagent" == "dmagent" ]; then
     echo "start dm-agent"
-    exec /usr/bin/dm-agent -q -n -t $DOMID
+    exec /usr/bin/dm-agent -q -n -t $DOMID &
 else
     echo "-stubdom -name qemu-$DOMID $QEMU_CMDLINE"
     exec /usr/bin/qemu-dm-wrapper $DOMID -stubdom -name qemu-$DOMID $QEMU_CMDLINE
-
 fi
+
+/sbin/getty 115200 hvc0 -n -l /bin/sh
+
