@@ -1,4 +1,4 @@
-# Deubg Layer for OpenXT
+# Debug Layer for OpenXT
 A simple OE layercontaining debugging "enhancements" (read: hacks) for @OpenXT.
 
 Currently supports:
