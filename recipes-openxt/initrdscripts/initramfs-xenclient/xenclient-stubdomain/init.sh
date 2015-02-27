@@ -90,3 +90,14 @@ fi
 
 /sbin/getty 115200 hvc0 -n -l /bin/sh
 
+while pidof qemu-system-i386 > /dev/null ; do
+    echo "Shutdown aborted, as QEMU wouldn't have time to clean up." > /dev/hvc0
+    echo > /dev/hvc0
+    echo "pkill -TERM qemu-system-i386 first!" > /dev/hvc0
+    echo > /dev/hvc0
+    /sbin/getty 115200 hvc0 -n -l /bin/sh
+done
+
+#... finally, shut down the stubdom properly. This avoids a scary-looking kernel panic.
+shutdown -f
+
