@@ -33,5 +33,5 @@ From your OpenXT root directory-- the same directory with the _do_build.sh_:
 If you've already completed a build, you can simply re-build the relevant sections:
 
 ```
-  ./do_build.sh -s dom0,stubinitramfs,ship
+  ./do_build.sh -s stubinitramfs,dom0,ship
 ```
