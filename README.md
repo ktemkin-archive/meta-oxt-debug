@@ -1,5 +1,5 @@
 # Debug Layer for OpenXT
-A simple OE layercontaining debugging "enhancements" (read: hacks) for @OpenXT.
+A simple OE layer containing debugging "enhancements" (read: hacks) for @OpenXT.
 
 Currently supports:
 * Debugging QEMU 1.4 applications -- including debugging support inside of stubdomains.
@@ -13,7 +13,7 @@ From your OpenXT root directory-- the same directory with the _do_build.sh_:
   ./do_build -s setupoe
 ```
 
-2\. Check out the `meta-oxt-debug` repostiory into your _repos_ directory:
+2\. Check out the `meta-oxt-debug` repository into your _repos_ directory:
 ```
   git clone git://github.com/ktemkin/meta-oxt-debug build/repos/meta-oxt-debug
 ```
