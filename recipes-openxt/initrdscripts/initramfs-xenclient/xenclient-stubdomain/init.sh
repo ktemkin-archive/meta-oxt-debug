@@ -21,22 +21,22 @@
 # THE SOFTWARE.
 #
 
-export PATH="/sbin:/usr/sbin:$PATH"
+export PATH="/sbin:$PATH"
 
 mount -t devtmpfs none /dev
 
-#exec 0<&-                      
-#exec 1<&-              
-#exec 2<&-
+exec 0<&-                      
+exec 1<&-              
+exec 2<&-
 
 exec 0< /dev/hvc0
 exec 1> /dev/hvc0
 exec 2> /dev/hvc0
 
-
 ## the modprobe of busybox-static is broken
 ## so we have to use insmod directly
 insmod /lib/modules/`uname -r`/extra/v4v.ko
+modprobe ivc
 
 sync
 mkdir -p /proc /sys /mnt /tmp
@@ -56,21 +56,11 @@ do
  fi
 done
 
-echo "Command line: `cat /proc/cmdline`"
-
 ln -s /proc/self/fd/2 /dev/stderr
-
-QEMU_CMDLINE=`cat /proc/cmdline | cut -d' ' -f4- `
-
-DOMID=`echo $QEMU_CMDLINE | cut -d' ' -f2 `
 
 echo $*
 echo 1 > /proc/sys/net/ipv4/ip_forward
 echo 0 > /proc/sys/net/ipv4/conf/all/rp_filter
-
-# Probably not the most elegant way to do that.
-/etc/qemu/qemu-ifup setup "brbridged" "eth0"
-/etc/qemu/qemu-ifup setup "brwireless" "eth1"
 
 mkdir -p /var/run
 export USE_INTEL_SB=1
@@ -78,15 +68,38 @@ export INTEL_DBUS=1
 
 rsyslogd -f /etc/rsyslog.conf -c4
 
-is_dmagent=`echo $QEMU_CMDLINE | cut -d' ' -f1`
+# Agent cmdline parsing.
+KERNEL_CMDLINE=`cat /proc/cmdline`
+for arg in $KERNEL_CMDLINE; do
+    case "$arg" in
+        guest_agent=*) AGENT=${arg##*=} ;;
+        guest_domid=*)  DOMID=${arg##*=} ;;
+        *) continue ;;
+    esac
+done
 
-if [ "$is_dmagent" == "dmagent" ]; then
-    echo "start dm-agent"
-    exec /usr/bin/dm-agent -q -n -t $DOMID &
-else
-    echo "-stubdom -name qemu-$DOMID $QEMU_CMDLINE"
-    exec /usr/bin/qemu-dm-wrapper $DOMID -stubdom -name qemu-$DOMID $QEMU_CMDLINE
-fi
+# Start requested agent.
+case "$AGENT" in
+    dmagent)
+        echo "Start dmagent..."
+        exec /usr/bin/dm-agent -q -n -t ${DOMID} &
+        ;;
+
+    *)
+        echo "No agent specified. Assume retro-compatibility by falling back to the deprecated behaviour."
+        if [ "${KERNEL_CMDLINE/dmagent/}" != "${KERNEL_CMDLINE}" ]; then
+            # Assumes we are stubbing for the domid passed at the end of the cmdline.
+            DOMID=${KERNEL_CMDLINE##* }
+            echo "Start dmagent..."
+            exec /usr/bin/dm-agent -q -n -t $DOMID &
+        else
+            QEMU_CMDLINE=`cat /proc/cmdline | cut -d' ' -f4- `
+            DOMID=`echo $QEMU_CMDLINE | cut -d' ' -f2 `
+            echo "Start qemu-dm-wrapper..."
+            exec /usr/bin/qemu-dm-wrapper $DOMID -stubdom -name qemu-$DOMID $QEMU_CMDLINE &
+        fi
+        ;;
+esac
 
 /sbin/getty 115200 hvc0 -n -l /bin/sh
 
