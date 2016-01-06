@@ -8,4 +8,4 @@ do_configure_prepend(){
 }
 
 
-PRINC := "${@int(PRINC) + 31}"
+PRINC := "${@int(PRINC) + 1}"

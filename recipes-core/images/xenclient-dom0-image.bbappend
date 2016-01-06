@@ -1,4 +1,4 @@
-PR .= ".3"
+PR .= ".4"
 IMAGE_INSTALL += " \
     task-core-tools-debug \
     xen-tools-xenconsole \
@@ -6,5 +6,8 @@ IMAGE_INSTALL += " \
     kernel-module-vmwgfx \
     kernel-module-mii \
     kernel-module-pcnet32 \
+    libc6-dbg \
+    valgrind \
+    gdb \
     "
 
