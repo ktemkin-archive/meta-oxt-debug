@@ -1,0 +1,52 @@
+diff --git a/templates/default/new-vm b/templates/default/new-vm
+index cdf638a..930f130 100644
+--- a/../templates/default/new-vm
++++ b/../templates/default/new-vm
+@@ -29,7 +29,7 @@
+     "display": "none",
+     "boot": "cd",
+     "flask-label": "system_u:system_r:hvm_guest_t",
+-    "stubdom-memory": "128",
++    "stubdom-memory": "512",
+     "stubdom-cmdline": "init=/init xen_blkfront.max=8",
+     "short-form": "UNCONFIGURED",
+     "long-form": "UNCONFIGURED",
+diff --git a/templates/default/new-vm-linux b/templates/default/new-vm-linux
+index 5ef559a..c4dcd71 100644
+--- a/../templates/default/new-vm-linux
++++ b/../templates/default/new-vm-linux
+@@ -29,7 +29,7 @@
+     "display": "none",
+     "boot": "cd",
+     "flask-label": "system_u:system_r:hvm_guest_t",
+-    "stubdom-memory": "128",
++    "stubdom-memory": "512",
+     "stubdom-cmdline": "init=/init xen_blkfront.max=8",
+     "short-form": "UNCONFIGURED",
+     "long-form": "UNCONFIGURED",
+diff --git a/templates/default/new-vm-windows8 b/templates/default/new-vm-windows8
+index 60ce1ef..f22c827 100644
+--- a/../templates/default/new-vm-windows8
++++ b/../templates/default/new-vm-windows8
+@@ -30,7 +30,7 @@
+     "display": "none",
+     "boot": "cd",
+     "flask-label": "system_u:system_r:hvm_guest_t",
+-    "stubdom-memory": "128",
++    "stubdom-memory": "512",
+     "stubdom-cmdline": "init=/init xen_blkfront.max=8",
+     "disk": {
+       "0": {
+diff --git a/templates/default/new-vm-xp b/templates/default/new-vm-xp
+index 9aeca68..f169405 100644
+--- a/../templates/default/new-vm-xp
++++ b/../templates/default/new-vm-xp
+@@ -29,7 +29,7 @@
+     "display": "none",
+     "boot": "cd",
+     "flask-label": "system_u:system_r:hvm_guest_t",
+-    "stubdom-memory": "128",
++    "stubdom-memory": "512",
+     "stubdom-cmdline": "init=/init xen_blkfront.max=8",
+     "disk": {
+       "0": {
