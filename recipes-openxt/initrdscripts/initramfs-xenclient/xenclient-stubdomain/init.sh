@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 #
 
-export PATH="/sbin:$PATH"
+export PATH="/usr/sbin:/sbin:$PATH"
 
 mount -t devtmpfs none /dev
 
@@ -36,7 +36,6 @@ exec 2> /dev/hvc0
 ## the modprobe of busybox-static is broken
 ## so we have to use insmod directly
 insmod /lib/modules/`uname -r`/extra/v4v.ko
-modprobe ivc
 
 sync
 mkdir -p /proc /sys /mnt /tmp
@@ -67,6 +66,8 @@ export USE_INTEL_SB=1
 export INTEL_DBUS=1
 
 rsyslogd -f /etc/rsyslog.conf -c4
+
+insmod /lib/modules/`uname -r`/kernel/drivers/xen/ivc.ko
 
 # Agent cmdline parsing.
 KERNEL_CMDLINE=`cat /proc/cmdline`
@@ -101,6 +102,7 @@ case "$AGENT" in
         ;;
 esac
 
+echo "Starting getty on hvc0."
 /sbin/getty 115200 hvc0 -n -l /bin/sh
 
 while pidof qemu-system-i386 > /dev/null ; do
