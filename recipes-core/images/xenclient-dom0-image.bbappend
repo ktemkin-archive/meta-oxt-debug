@@ -9,5 +9,6 @@ IMAGE_INSTALL += " \
     libc6-dbg \
     valgrind \
     gdb \
+    util-linux-prlimit \
     "
 
